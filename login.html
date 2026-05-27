@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aspirant Login</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="auth">
+<div class="auth-card">
+  <h1>MCQ Mock App</h1>
+  <p>Login to practice from your notes/PDF</p>
+  <form method="post">
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="password" type="password" placeholder="Password" required>
+    <button>Login</button>
+  </form>
+  <b class="error">{{msg}}</b>
+  <p>New user? <a href="/signup">Create account</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aspirant Signup</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="auth">
+<div class="auth-card">
+  <h1>Create Account</h1>
+  <p>Free aspirant mock test account</p>
+  <form method="post">
+    <input name="name" placeholder="Full Name" required>
+    <input name="email" type="email" placeholder="Email" required>
+    <input name="password" type="password" placeholder="Password" required>
+    <button>Signup</button>
+  </form>
+  <b class="error">{{msg}}</b>
+  <p>Already user? <a href="/login">Login</a></p>
+</div>
+</body>
+</html>
