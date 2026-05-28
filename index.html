@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AspirantPro - Smart MCQ Mock Practice App</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+body{min-height:100vh;background:linear-gradient(135deg,#0f172a,#1e293b,#0ea5e9);color:#0f172a}
+.hidden{display:none!important}.app{max-width:1150px;margin:auto;padding:14px}.card{background:rgba(255,255,255,.96);border-radius:22px;padding:18px;margin:12px 0;box-shadow:0 20px 50px rgba(2,6,23,.22)}
+.header{display:flex;align-items:center;justify-content:space-between;gap:12px;color:white;padding:16px 4px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,#f97316,#0ea5e9);display:grid;place-items:center;color:#fff;font-weight:1000;font-size:20px}.brand h1{font-size:26px}.brand p{font-size:12px;opacity:.85}.userbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.avatar{width:38px;height:38px;border-radius:50%}.btn{border:0;border-radius:14px;padding:12px 16px;font-weight:900;cursor:pointer;background:#0f172a;color:white}.btn.orange{background:#f97316}.btn.blue{background:#0284c7}.btn.green{background:#16a34a}.btn.light{background:#e2e8f0;color:#0f172a}.btn.red{background:#dc2626}.btn.full{width:100%;margin-top:10px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}.col6{grid-column:span 6}.col4{grid-column:span 4}.col8{grid-column:span 8}.col12{grid-column:span 12}input,textarea,select{width:100%;padding:13px 14px;border:1px solid #cbd5e1;border-radius:14px;font-size:15px;margin-top:8px}textarea{min-height:150px;resize:vertical}.tabs{display:flex;gap:8px;overflow:auto;padding:6px 0}.tab{white-space:nowrap;border:0;border-radius:999px;padding:11px 16px;font-weight:900;background:#e2e8f0;color:#334155}.tab.active{background:#f97316;color:white}.muted{color:#64748b;font-size:13px}.title{font-size:22px;font-weight:1000;margin-bottom:8px}.qcard{border:1px solid #e2e8f0;border-radius:18px;padding:14px;margin:12px 0;background:#fff}.option{display:block;padding:12px;border:1px solid #cbd5e1;border-radius:14px;margin:8px 0;cursor:pointer}.option input{width:auto;margin-right:8px}.resultBig{font-size:42px;font-weight:1000;color:#16a34a}.list{display:grid;gap:10px}.item{border:1px solid #e2e8f0;border-radius:16px;padding:12px;background:white}.pill{display:inline-block;padding:5px 10px;border-radius:999px;background:#e0f2fe;color:#0369a1;font-size:12px;font-weight:900;margin:2px}.loginBox{min-height:100vh;display:grid;place-items:center;padding:18px}.loginCard{max-width:430px;width:100%;text-align:center}.bigLogo{width:88px;height:88px;border-radius:28px;margin:auto auto 14px;background:linear-gradient(135deg,#f97316,#0ea5e9);display:grid;place-items:center;color:white;font-size:38px;font-weight:1000}.danger{background:#fee2e2;color:#991b1b;padding:10px;border-radius:12px;margin:8px 0}.success{background:#dcfce7;color:#166534;padding:10px;border-radius:12px;margin:8px 0}@media(max-width:760px){.grid{grid-template-columns:1fr}.col6,.col4,.col8,.col12{grid-column:span 1}.header{display:block}.userbar{justify-content:flex-start;margin-top:10px}.brand h1{font-size:22px}.card{padding:14px;border-radius:18px}.btn{padding:11px 13px}.tabs{position:sticky;top:0;background:rgba(15,23,42,.9);z-index:5;border-radius:16px;padding:8px}}
+</style>
+</head>
+<body>
+<div id="loginScreen" class="loginBox">
+  <div class="card loginCard">
+    <div class="bigLogo">AP</div>
+    <h1 id="loginAppName">AspirantPro</h1>
+    <p class="muted">Smart MCQ Mock Practice App</p>
+    <button id="googleLoginBtn" class="btn orange full">Continue with Google</button>
+    <p class="muted" style="margin-top:12px">Students Gmail se login karenge. Admin panel sirf owner email ko dikhega.</p>
+  </div>
+</div>
+
+<div id="mainApp" class="app hidden">
+  <div class="header">
+    <div class="brand"><div class="logo">AP</div><div><h1 id="appNameHead">AspirantPro</h1><p>Smart MCQ Mock Practice App</p></div></div>
+    <div class="userbar"><img id="userPhoto" class="avatar" src=""/><span id="userName"></span><button id="logoutBtn" class="btn light">Logout</button></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-page="dashboard">Dashboard</button>
+    <button class="tab" data-page="generator">MCQ Generator</button>
+    <button class="tab" data-page="mock">Mock Test</button>
+    <button class="tab" data-page="results">Results</button>
+    <button id="adminTab" class="tab hidden" data-page="admin">Admin</button>
+  </div>
+
+  <section id="dashboard" class="page card">
+    <div class="title">Welcome, Aspirant 👋</div>
+    <p class="muted">Notes paste karo, MCQ generate karo, mock test do aur score save karo.</p>
+    <div class="grid" style="margin-top:12px">
+      <div class="card col4"><b>Total Questions</b><div class="resultBig" id="statQ">0</div></div>
+      <div class="card col4"><b>Your Tests</b><div class="resultBig" id="statT">0</div></div>
+      <div class="card col4"><b>Best Score</b><div class="resultBig" id="statB">0%</div></div>
+    </div>
+  </section>
+
+  <section id="generator" class="page card hidden">
+    <div class="title">Notes se MCQ Generate</div>
+    <p class="muted">PDF ka text copy karke yaha paste karo. Abhi browser version me text se automatic MCQ banega.</p>
+    <textarea id="notesText" placeholder="Yaha apna notes / PDF text paste karo..."></textarea>
+    <div class="grid">
+      <div class="col6"><input id="topicInput" placeholder="Topic name, e.g. History Chapter 1" /></div>
+      <div class="col6"><input id="countInput" type="number" value="10" min="3" max="30" /></div>
+    </div>
+    <button id="genBtn" class="btn orange full">Generate MCQs</button>
+    <div id="genMsg"></div>
+    <div id="generatedList" class="list"></div>
+  </section>
+
+  <section id="mock" class="page card hidden">
+    <div class="title">Mock Test</div>
+    <div class="grid">
+      <div class="col8"><select id="mockTopic"></select></div>
+      <div class="col4"><button id="startMockBtn" class="btn blue full">Start Mock</button></div>
+    </div>
+    <form id="quizForm"></form>
+    <button id="submitMockBtn" class="btn green full hidden">Submit Test</button>
+    <div id="mockResult"></div>
+  </section>
+
+  <section id="results" class="page card hidden">
+    <div class="title">My Results</div>
+    <div id="resultList" class="list"></div>
+  </section>
+
+  <section id="admin" class="page card hidden">
+    <div class="title">Admin Panel</div>
+    <p class="muted">Yaha se app name change, theme setting aur questions manage kar sakte ho.</p>
+    <div class="grid">
+      <div class="col8"><input id="adminAppName" placeholder="App name" /></div>
+      <div class="col4"><button id="saveSettingsBtn" class="btn orange full">Save Settings</button></div>
+    </div>
+    <div id="adminMsg"></div>
+    <h3 style="margin-top:16px">All Questions</h3>
+    <div id="adminQuestions" class="list"></div>
+  </section>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, deleteDoc, doc, setDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAAzSCjvf_prub3xf-asdrWGop1fj8a3X8",
+  authDomain: "aspirant-ac3e4.firebaseapp.com",
+  projectId: "aspirant-ac3e4",
+  storageBucket: "aspirant-ac3e4.firebasestorage.app",
+  messagingSenderId: "399500685377",
+  appId: "1:399500685377:web:88339191ba9370869456c0"
+};
+
+const ADMIN_EMAIL = 'sachinsoren225@gmail.com';
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
+let currentUser = null;
+let allQuestions = [];
+let activeQuiz = [];
+
+const $ = id => document.getElementById(id);
+const show = id => document.querySelectorAll('.page').forEach(p=>p.classList.toggle('hidden',p.id!==id));
+const msg = (id, text, type='success') => $(id).innerHTML = `<div class="${type}">${text}</div>`;
+
+$('googleLoginBtn').onclick = () => signInWithPopup(auth, provider).catch(e => alert(e.message));
+$('logoutBtn').onclick = () => signOut(auth);
+
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');show(t.dataset.page); if(t.dataset.page==='results') loadResults(); if(t.dataset.page==='admin') loadAdmin();});
+
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+  $('loginScreen').classList.toggle('hidden', !!user);
+  $('mainApp').classList.toggle('hidden', !user);
+  if(!user) return;
+  $('userName').textContent = user.displayName || user.email;
+  $('userPhoto').src = user.photoURL || 'https://ui-avatars.com/api/?name=AP';
+  $('adminTab').classList.toggle('hidden', user.email !== ADMIN_EMAIL);
+  await ensureUser();
+  await loadSettings();
+  await loadQuestions();
+  await loadStats();
+});
+
+async function ensureUser(){ await setDoc(doc(db,'users',currentUser.uid),{name:currentUser.displayName,email:currentUser.email,photo:currentUser.photoURL,lastLogin:serverTimestamp()},{merge:true}); }
+async function loadSettings(){ const snap=await getDoc(doc(db,'settings','app')); const name=snap.exists()?snap.data().name:'AspirantPro'; $('appNameHead').textContent=name; $('loginAppName').textContent=name; $('adminAppName').value=name; }
+$('saveSettingsBtn').onclick = async()=>{ await setDoc(doc(db,'settings','app'),{name:$('adminAppName').value||'AspirantPro'},{merge:true}); await loadSettings(); msg('adminMsg','Settings saved'); };
+
+function splitSentences(text){return text.replace(/\s+/g,' ').split(/(?<=[.!?।])\s+/).map(s=>s.trim()).filter(s=>s.length>35);} 
+function keywords(text){return [...new Set(text.toLowerCase().replace(/[^a-z0-9अ-ह\s]/gi,'').split(/\s+/).filter(w=>w.length>4))].slice(0,80);} 
+function makeMcqs(text,count){const sents=splitSentences(text); const keys=keywords(text); const out=[]; for(const s of sents){ if(out.length>=count) break; const words=s.split(/\s+/).filter(w=>w.length>4); const ans=words.find(w=>keys.includes(w.toLowerCase().replace(/[^a-z0-9अ-ह]/gi,''))) || words[0]; if(!ans) continue; const q=s.replace(ans,'_____'); const wrong=keys.filter(k=>k!==ans.toLowerCase()).sort(()=>Math.random()-.5).slice(0,3); const options=[ans,...wrong].sort(()=>Math.random()-.5); if(options.length>=4) out.push({question:q,answer:ans,options,topic:$('topicInput').value||'General'}); } return out; }
+
+$('genBtn').onclick = async()=>{ const text=$('notesText').value.trim(); const count=Number($('countInput').value||10); if(text.length<120) return msg('genMsg','Kam se kam 120 character notes paste karo','danger'); const qs=makeMcqs(text,count); if(!qs.length) return msg('genMsg','MCQ generate nahi hua. Thoda clear notes paste karo.','danger'); for(const qn of qs){ await addDoc(collection(db,'questions'),{...qn,createdBy:currentUser.uid,createdAt:serverTimestamp()}); } msg('genMsg',`${qs.length} MCQ saved successfully`); renderGenerated(qs); await loadQuestions(); await loadStats(); };
+function renderGenerated(qs){ $('generatedList').innerHTML=qs.map((q,i)=>`<div class="item"><b>Q${i+1}. ${q.question}</b><br>${q.options.map(o=>`<span class="pill">${o}</span>`).join('')}<br><small>Ans: ${q.answer}</small></div>`).join(''); }
+
+async function loadQuestions(){ const snap=await getDocs(query(collection(db,'questions'),orderBy('createdAt','desc'))).catch(async()=>await getDocs(collection(db,'questions'))); allQuestions=snap.docs.map(d=>({id:d.id,...d.data()})); const topics=[...new Set(allQuestions.map(q=>q.topic||'General'))]; $('mockTopic').innerHTML=topics.map(t=>`<option>${t}</option>`).join('') || '<option>No Questions</option>'; }
+$('startMockBtn').onclick=()=>{ const topic=$('mockTopic').value; activeQuiz=allQuestions.filter(q=>(q.topic||'General')===topic).slice(0,20); if(!activeQuiz.length) return $('quizForm').innerHTML='<div class="danger">Pehle MCQ generate karo.</div>'; $('quizForm').innerHTML=activeQuiz.map((q,i)=>`<div class="qcard"><b>Q${i+1}. ${q.question}</b>${q.options.map(o=>`<label class="option"><input type="radio" name="q${i}" value="${o}">${o}</label>`).join('')}</div>`).join(''); $('submitMockBtn').classList.remove('hidden'); $('mockResult').innerHTML=''; };
+$('submitMockBtn').onclick=async()=>{ let score=0; activeQuiz.forEach((q,i)=>{ const a=document.querySelector(`input[name="q${i}"]:checked`); if(a && a.value===q.answer) score++; }); const percent=Math.round(score*100/activeQuiz.length); $('mockResult').innerHTML=`<div class="card"><div class="resultBig">${percent}%</div><b>${score}/${activeQuiz.length} correct</b></div>`; await addDoc(collection(db,'results'),{uid:currentUser.uid,email:currentUser.email,score,total:activeQuiz.length,percent,topic:$('mockTopic').value,createdAt:serverTimestamp()}); await loadStats(); };
+
+async function loadResults(){ const snap=await getDocs(query(collection(db,'results'),where('uid','==',currentUser.uid))); const arr=snap.docs.map(d=>d.data()).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)); $('resultList').innerHTML=arr.map(r=>`<div class="item"><b>${r.topic}</b><br><span class="pill">${r.percent}%</span> ${r.score}/${r.total} correct</div>`).join('') || '<p class="muted">Abhi koi result nahi.</p>'; }
+async function loadStats(){ await loadQuestions(); const snap=await getDocs(query(collection(db,'results'),where('uid','==',currentUser.uid))); const arr=snap.docs.map(d=>d.data()); $('statQ').textContent=allQuestions.length; $('statT').textContent=arr.length; $('statB').textContent=(arr.length?Math.max(...arr.map(x=>x.percent||0)):0)+'%'; }
+async function loadAdmin(){ if(currentUser.email!==ADMIN_EMAIL) return; await loadQuestions(); $('adminQuestions').innerHTML=allQuestions.map(q=>`<div class="item"><b>${q.topic||'General'}</b><br>${q.question}<br><button class="btn red" onclick="deleteQuestion('${q.id}')">Delete</button></div>`).join('') || '<p>No questions</p>'; }
+window.deleteQuestion=async(id)=>{ if(confirm('Delete this question?')){ await deleteDoc(doc(db,'questions',id)); await loadAdmin(); await loadStats(); }};
+</script>
+</body>
+</html>
